@@ -5,6 +5,7 @@ CHECK: Use your favorite Windows diff utility to confirm that app1.res is
        the same as the app1.out file that is in the repository.
 """
 from taxcalc import *
+import matplotlib as plt
 
 # create Records object containing pit.csv and pit_weights.csv input data
 recs = Records()
@@ -66,15 +67,21 @@ dt1, dt2 = calc1.distribution_tables(calc2, output_categories,
 
 dt2['pitax_diff'] = dt2['pitax'] - dt1['pitax']
 
+dt1 = dt1.reset_index().copy()
+dt2 = dt2.reset_index().copy()
+
+#dt1 = dt1.reset_index('output_categories')
+
+
 dt1 = dt1.fillna(0)
 dt2 = dt2.fillna(0)
 if output_in_averages:
     print('***************************  Average Tax Burden ', end=' ')
-    print(f'(in MKD.) per Taxpayer for {year}  ***************************')
+    print(f'(in MKD.) per Taxpayer for 2017  ***************************')
     pd.options.display.float_format = '{:.0f}'.format
 else:
     print('*****************  Distribution Tables ', end=' ')
-    print(f'for Total Tax Collection (in MKD millions) for {year} *********')
+    print(f'for Total Tax Collection (in MKD millions) for 2017 *********')
     #pd.options.display.float_format = '{:,.0f}'.format
     pd.options.display.float_format = '{:.0f}'.format
                 
@@ -89,6 +96,8 @@ print(dt2)
 print('\n')
 
 
+
+dt2[["index", "pitax"]].plot(kind = "bar" )
 
 
 
